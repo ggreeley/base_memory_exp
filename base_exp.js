@@ -1,61 +1,60 @@
-// generate sub and condition id
-var sub_id = jsPsych.randomization.randomID(10);
-var cond_id_temp = [1,2]
-var cond_id = jsPsych.randomization.sampleWithoutReplacement(cond_id_temp, 1)
+var timeline = [];
 
-// define fixation
+var sub_id = jsPsych.randomization.randomID(10);
+var cond_id_temp = [1,2];
+var cond_id = jsPsych.randomization.sampleWithoutReplacement(cond_id_temp, 1);
+
+var instr1 = {
+    type: 'html-keyboard-response',
+    stimulus: 'hello 1 hello 1 hello 1',
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 3000,
+};
+
+timeline.push(instr1);
+
+var instr2 = {
+    type: 'html-keyboard-response',
+    stimulus: 'hello 2 hello 2 hello 2',
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 3000,
+}
+
+timeline.push(instr2);
+
 var fixation = {
     type: 'html-keyboard-response',
     stimulus: '+',
     choices: jsPsych.NO_KEYS,
     trial_duration: 500,
-  }
+    prompt: '(very unpleasant) 1 --- 2 --- 3 --- 4 --- 5 (very pleasant)'
+  };
 
-// define one list
-var listA = ['green', 'blue', 'orange', 'red',
-            'pink', 'black', 'purple', 'yellow']
-// define another list
-var listB = ['yellow', 'purple', 'black', 'pink',
-            'red', 'orange', 'blue', 'green'];
-
-// sample one of them
 if (cond_id == 1) {
-    var study_list = listA;
+    var study_list_1 = listA;
+    var study_list_2 = listB;
 } else {
-    if (cond_id == 2) {
-    var study_list = listB;
-}
+    var study_list_1 = listB;
+    var study_list_2 = listA;
+};
+
+var encoding_1 = {
+    timeline: [
+            fixation,
+        {
+            type: 'html-keyboard-response',
+            stimulus: jsPsych.timelineVariable('stim'),
+            choices: [1,2,3,4,5],
+            trial_duration: 3000,
+            prompt: '(very unpleasant) 1 --- 2 --- 3 --- 4 --- 5 (very pleasant)',
+            response_ends_trial: false
+        }
+    ],
+    timeline_variables: study_list_1
 }
 
-var study_words = []
-for (var i=0; i<study_list.length; i++){
-    var word = {
-        type: 'html-keyboard-response',
-        stimulus: study_list[i],
-        trial_duration: 3000,
-        prompt: '(very unpleasant) 1 --- 2 --- 3 --- 4 --- 5 (very pleasant)',
-        response_ends_trial: false
-    }
-    study_words.push(fixation,word);
-}
-// empty nodes, loop fix-i-fix-i ...
-//var nodes = []
-//for (var i=1; i<11; i++){
-    //var node = {
-        //type: 'html-keyboard-response',
-        //stimulus: i,
-        //trial_duration: 3000,
-        //prompt: '(very unpleasant) 1 / 2 / 3 / 4 / 5 (very pleasant)',
-        //response_ends_trial: false
-    //}
-    //nodes.push(fixation,node);
-//}
+timeline.push(encoding_1)
 
-// log extra data
-jsPsych.data.addProperties({participant: sub_id});
-jsPsych.data.addProperties({assigned_cond: cond_id});
-
-// initiate experiment
 jsPsych.init({
-    timeline: study_words
+    timeline: timeline
 });
