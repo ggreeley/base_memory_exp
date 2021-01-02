@@ -84,6 +84,20 @@ var encoding_2 = {
 
 timeline.push(encoding_2);
 
+var recall_2 = {
+    type: 'survey-html-form',
+    preamble: '<p> Please type all the words you can remember, in any order that you prefer. </p>' +
+    '<p> After entering a word, use a comma and press enter/return to begin entering the next word. </p>',
+    // relies on custom css / textarea html - very handy for recall 
+    html: 
+    '<div class="inline-div"><textarea name="recall2box1" type="text" id="test-resp-box" class="inline-textarea"></textarea></div>' +
+    '<div class="inline-div"><textarea name="recall2box2" type="text" id="test-resp-box" class="inline-textarea"></textarea></div>',
+    autofocus: 'test-resp-box',
+    trial_duration: 10000
+}; 
+
+timeline.push(recall_2);
+
 jsPsych.init({
     timeline: timeline,
     show_progress_bar: true
