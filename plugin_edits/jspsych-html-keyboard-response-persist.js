@@ -9,12 +9,12 @@
  **/
 
 
-jsPsych.plugins["html-keyboard-response-persist"] = (function() {
+jsPsych.plugins["html-keyboard-response"] = (function() {
 
   var plugin = {};
 
   plugin.info = {
-    name: 'html-keyboard-response-persist',
+    name: 'html-keyboard-response',
     description: '',
     parameters: {
       stimulus: {
@@ -72,8 +72,8 @@ jsPsych.plugins["html-keyboard-response-persist"] = (function() {
 
     // store response
     var response = {
-      rt: null,
-      key: null
+      rt: [],
+      key: []
     };
 
     // function to end trial when it is time
@@ -91,7 +91,7 @@ jsPsych.plugins["html-keyboard-response-persist"] = (function() {
       var trial_data = {
         "rt": response.rt,
         "stimulus": trial.stimulus,
-        "key_presses": response.key
+        "key_press": response.key
       };
 
       // clear the display
@@ -124,7 +124,7 @@ jsPsych.plugins["html-keyboard-response-persist"] = (function() {
         callback_function: after_response,
         valid_responses: trial.choices,
         rt_method: 'performance',
-        persist: true,
+        persist: false,
         allow_held_key: false
       });
     }
@@ -135,7 +135,7 @@ jsPsych.plugins["html-keyboard-response-persist"] = (function() {
         display_element.querySelector('#jspsych-html-keyboard-response-stimulus').style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
- 
+
     // end trial if trial_duration is set
     if (trial.trial_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {

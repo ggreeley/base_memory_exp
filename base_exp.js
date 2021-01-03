@@ -103,13 +103,11 @@ timeline.push(encoding_1);
 // able to time a recall by ebedding html into html-keyboard response var!
 //
 var recall_3 = {
-    type: 'survey-html-form-timed',
+    type: 'survey-html-form-timed-NEW',
     preamble: '<p> Please type all the words you can remember, in any order that you prefer. </p>' +
     '<p> This time you only have 30 seconds!!! </p>',
-    html: '<div class="inline-div"><textarea name="recall3box1" type="text" id="test-resp-box1"></textarea></div>'
-    //trial_duration: 10000
-   //prompt: 'Remember, 30 seconds!!!',
-    //choices: jsPsych.NO_KEYS,
+    html: '<div class="inline-div"><textarea name="recall3box1" type="text" id="test-resp-box1"></textarea></div>',
+    trial_duration: 5000
 };
 
 timeline.push(recall_3);

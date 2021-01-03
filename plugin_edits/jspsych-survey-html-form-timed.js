@@ -28,12 +28,6 @@ jsPsych.plugins['survey-html-form-timed'] = (function() {
         default: null,
         description: 'HTML formatted string to display at the top of the page above all the questions.'
       },
-      button_label: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Button label',
-        default:  'Continue',
-        description: 'The text that appears on the button to finish the trial.'
-      },
       autofocus: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Element ID to focus',
@@ -55,8 +49,8 @@ jsPsych.plugins['survey-html-form-timed'] = (function() {
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Trial duration',
-        default: 1000,
-        description: 'How long to show trial before it ends.'
+        default: null,
+        description: 'How long to show trial before it ends. Required - default 30 sec.'
       }
     }
   };
@@ -95,40 +89,30 @@ jsPsych.plugins['survey-html-form-timed'] = (function() {
       }
     }
 
-    function end_trial() {
-        // kill any remaining setTimeout handlers
-      jsPsych.pluginAPI.clearAllTimeouts();
-        // kill keyboard listeners
-      jsPsych.pluginAPI.cancelAllKeyboardResponses();
-
-      //var endTime = performance.now();
-      //var response_time = endTime - startTime;
-
-      var question_data = serializeArray(this);
-
-      if (!trial.dataAsArray) {
-        question_data = objectifyForm(question_data);
-      };
-
-        // gather the data to store for the trial
-      var trialdata = {
-          //"rt": response_time,
-          "responses": JSON.stringify(question_data)
-        };
-  
-        // clear the display
-      display_element.innerHTML = '';
-  
-        // move on to the next trial
-      jsPsych.finishTrial(trialdata);
-      };
-
     // end trial if trial_duration is set
     if (trial.trial_duration !== null) {
+
       jsPsych.pluginAPI.setTimeout(function() {
-        end_trial();
-      }, trial.trial_duration);
-    }
+
+        var question_data = serializeArray(this);
+
+        if (!trial.dataAsArray) {
+          question_data = objectifyForm(question_data);
+        };
+        // gather the data to store for the tria
+        var trialdata = {
+          "responses": JSON.stringify(question_data)
+        };
+        // clear the display
+        display_element.innerHTML = '';
+  
+        // move on to the next trial
+        jsPsych.finishTrial(trialdata);
+
+        display_element.querySelector('#jspsych-survey-text-form').requestSubmit();
+      }, trial.trial_duration
+      );
+    };
   };
 
   return plugin;
