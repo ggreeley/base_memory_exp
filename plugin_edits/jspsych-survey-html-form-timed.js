@@ -1,19 +1,19 @@
-/**
- * jspsych-survey-html-form
- * a jspsych plugin for free html forms
- *
- * Jan Simson
- *
- * documentation: docs.jspsych.org
- *
- */
+//**
+ //* jspsych-survey-html-form
+ //* a jspsych plugin for free html forms
+ //*
+ //* Jan Simson
+ //*
+ //* documentation: docs.jspsych.org
+ //*
+ //*/
 
-jsPsych.plugins['survey-html-form'] = (function() {
+jsPsych.plugins['survey-html-form-timed'] = (function() {
 
   var plugin = {};
 
   plugin.info = {
-    name: 'survey-html-form',
+    name: 'survey-html-form-timed',
     description: '',
     parameters: {
       html: {
@@ -51,6 +51,12 @@ jsPsych.plugins['survey-html-form'] = (function() {
         pretty_name: 'Allow autocomplete',
         default: false,
         description: "Setting this to true will enable browser auto-complete or auto-fill for the form."
+      },
+      trial_duration: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Trial duration',
+        default: null,
+        description: 'How long to show trial before it ends.'
       }
     }
   }

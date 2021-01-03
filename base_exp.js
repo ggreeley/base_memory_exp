@@ -59,9 +59,9 @@ var recall_1 = {
     '<p> After entering a word, use a comma and press enter/return to begin entering the next word. </p>',
     // relies on custom css / textarea html - very handy for recall 
     html: 
-    '<div class="inline-div"><textarea name="recall1box1" type="text" id="test-resp-box" class="inline-textarea"></textarea></div>' +
-    '<div class="inline-div"><textarea name="recall1box2" type="text" id="test-resp-box" class="inline-textarea"></textarea></div>',
-    autofocus: 'test-resp-box',
+    '<div class="inline-div"><textarea name="recall1box1" type="text" id="test-resp-box1"></textarea></div>' +
+    '<div class="inline-div"><textarea name="recall1box2" type="text" id="test-resp-box2"></textarea></div>',
+    autofocus: 'test-resp-box1',
     trial_duration: 10000
 }; 
 
@@ -84,19 +84,33 @@ var encoding_2 = {
 
 timeline.push(encoding_2);
 
+// note: the way chatplat is embedded below is interesting.
+// could use that method to embed websites as stimuli
 var recall_2 = {
     type: 'survey-html-form',
     preamble: '<p> Please type all the words you can remember, in any order that you prefer. </p>' +
-    '<p> After entering a word, use a comma and press enter/return to begin entering the next word. </p>',
+    '<p> You can use the box on the left for notes. Use the screen on the right to send items to a partner (pretend for pilot). </p>',
     // relies on custom css / textarea html - very handy for recall 
     html: 
-    '<div class="inline-div"><textarea name="recall2box1" type="text" id="test-resp-box" class="inline-textarea"></textarea></div>' +
-    '<div class="inline-div"><textarea name="recall2box2" type="text" id="test-resp-box" class="inline-textarea"></textarea></div>',
-    autofocus: 'test-resp-box',
-    trial_duration: 10000
+    '<div class="inline-div"><textarea name="recall2box1" type="text" id="test-resp-box1"></textarea></div>' +
+    `<iframe height=500 width=700 frameborder="no" src="https://chatplat.com/#/Chat/3835/3rkRQ0hYrEqmi9c//${sub_id}"></iframe><br>&nbsp;`,
+    autofocus: 'test-resp-box1'
 }; 
 
 timeline.push(recall_2);
+
+// able to time a recall by ebedding html into html-keyboard response var!
+//
+var recall_3 = {
+    type: 'html-keyboard-response',
+    stimulus: '<p> Please type all the words you can remember, in any order that you prefer. </p>' +
+    '<div class="inline-div"><textarea name="recall2box1" type="text" id="test-resp-box1"></textarea></div>',
+    prompt: 'Recall as many words as you can in 30 seconds!!!',
+    choices: jsPsych.NO_KEYS,
+    trial_duration: 30000
+}
+
+timeline.push(recall_3)
 
 jsPsych.init({
     timeline: timeline,
