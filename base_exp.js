@@ -42,7 +42,7 @@ var encoding_1 = {
         {
             type: 'html-keyboard-response',
             stimulus: jsPsych.timelineVariable('stim'),
-            choices: [1,2,3,4,5],
+            choices: [49,50,51,52,53],
             trial_duration: 1000,
             prompt: '(very unpleasant) 1 --- 2 --- 3 --- 4 --- 5 (very pleasant)',
             response_ends_trial: false
@@ -61,8 +61,7 @@ var recall_1 = {
     html: 
     '<div class="inline-div"><textarea name="recall1box1" type="text" id="test-resp-box1"></textarea></div>' +
     '<div class="inline-div"><textarea name="recall1box2" type="text" id="test-resp-box2"></textarea></div>',
-    autofocus: 'test-resp-box1',
-    trial_duration: 10000
+    autofocus: 'test-resp-box1'
 }; 
 
 timeline.push(recall_1);
@@ -73,7 +72,7 @@ var encoding_2 = {
         {
             type: 'html-keyboard-response',
             stimulus: jsPsych.timelineVariable('stim'),
-            choices: [1,2,3,4,5],
+            choices: [49,50,51,52,53],
             trial_duration: 1000,
             prompt: '(very unpleasant) 1 --- 2 --- 3 --- 4 --- 5 (very pleasant)',
             response_ends_trial: false
@@ -99,18 +98,28 @@ var recall_2 = {
 
 timeline.push(recall_2);
 
+timeline.push(encoding_1);
+
 // able to time a recall by ebedding html into html-keyboard response var!
 //
 var recall_3 = {
-    type: 'html-keyboard-response',
-    stimulus: '<p> Please type all the words you can remember, in any order that you prefer. </p>' +
-    '<div class="inline-div"><textarea name="recall2box1" type="text" id="test-resp-box1"></textarea></div>',
-    prompt: 'Recall as many words as you can in 30 seconds!!!',
-    choices: jsPsych.NO_KEYS,
-    trial_duration: 30000
-}
+    type: 'survey-html-form-timed',
+    preamble: '<p> Please type all the words you can remember, in any order that you prefer. </p>' +
+    '<p> This time you only have 30 seconds!!! </p>',
+    html: '<div class="inline-div"><textarea name="recall3box1" type="text" id="test-resp-box1"></textarea></div>'
+    //trial_duration: 10000
+   //prompt: 'Remember, 30 seconds!!!',
+    //choices: jsPsych.NO_KEYS,
+};
 
-timeline.push(recall_3)
+timeline.push(recall_3);
+
+var closeInstr = {
+    type: 'html-keyboard-response',
+    stimulus: 'That concludes this example experiment. Press any key to finish. After that, simply close the tab.'
+};
+
+timeline.push(closeInstr);
 
 jsPsych.init({
     timeline: timeline,

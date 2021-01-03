@@ -1,12 +1,12 @@
-//**
- //* jspsych-survey-html-form
- //* a jspsych plugin for free html forms
- //*
- //* Jan Simson
- //*
- //* documentation: docs.jspsych.org
- //*
- //*/
+/**
+ * jspsych-survey-html-form
+ * a jspsych plugin for free html forms
+ *
+ * Jan Simson
+ *
+ * documentation: docs.jspsych.org
+ *
+ */
 
 jsPsych.plugins['survey-html-form-timed'] = (function() {
 
@@ -55,11 +55,11 @@ jsPsych.plugins['survey-html-form-timed'] = (function() {
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Trial duration',
-        default: null,
+        default: 1000,
         description: 'How long to show trial before it ends.'
       }
     }
-  }
+  };
 
   plugin.trial = function(display_element, trial) {
 
@@ -79,7 +79,7 @@ jsPsych.plugins['survey-html-form-timed'] = (function() {
     html += trial.html;
 
     // add submit button
-    html += '<input type="submit" id="jspsych-survey-html-form-next" class="jspsych-btn jspsych-survey-html-form" value="'+trial.button_label+'"></input>';
+    //html += '<input type="submit" id="jspsych-survey-html-form-next" class="jspsych-btn jspsych-survey-html-form" value="'+trial.button_label+'"></input>';
 
     html += '</form>';
     display_element.innerHTML = html;
@@ -95,83 +95,42 @@ jsPsych.plugins['survey-html-form-timed'] = (function() {
       }
     }
 
-    display_element.querySelector('#jspsych-survey-html-form').addEventListener('submit', function(event) {
-      // don't submit form
-      event.preventDefault();
+    function end_trial() {
+        // kill any remaining setTimeout handlers
+      jsPsych.pluginAPI.clearAllTimeouts();
+        // kill keyboard listeners
+      jsPsych.pluginAPI.cancelAllKeyboardResponses();
 
-      // measure response time
-      var endTime = performance.now();
-      var response_time = endTime - startTime;
+      //var endTime = performance.now();
+      //var response_time = endTime - startTime;
 
       var question_data = serializeArray(this);
 
       if (!trial.dataAsArray) {
         question_data = objectifyForm(question_data);
-      }
-
-      // save data
-      var trialdata = {
-        "rt": response_time,
-        "responses": JSON.stringify(question_data)
       };
 
+        // gather the data to store for the trial
+      var trialdata = {
+          //"rt": response_time,
+          "responses": JSON.stringify(question_data)
+        };
+  
+        // clear the display
       display_element.innerHTML = '';
-
-      // next trial
+  
+        // move on to the next trial
       jsPsych.finishTrial(trialdata);
-    });
+      };
 
-    var startTime = performance.now();
-  };
-
-  /*!
-   * Serialize all form data into an array
-   * (c) 2018 Chris Ferdinandi, MIT License, https://gomakethings.com
-   * @param  {Node}   form The form to serialize
-   * @return {String}      The serialized form data
-   */
-  var serializeArray = function (form) {
-    // Setup our serialized data
-    var serialized = [];
-
-    // Loop through each field in the form
-    for (var i = 0; i < form.elements.length; i++) {
-      var field = form.elements[i];
-
-      // Don't serialize fields without a name, submits, buttons, file and reset inputs, and disabled fields
-      if (!field.name || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') continue;
-
-      // If a multi-select, get all selections
-      if (field.type === 'select-multiple') {
-        for (var n = 0; n < field.options.length; n++) {
-          if (!field.options[n].selected) continue;
-          serialized.push({
-            name: field.name,
-            value: field.options[n].value
-          });
-        }
-      }
-
-      // Convert field data to a query string
-      else if ((field.type !== 'checkbox' && field.type !== 'radio') || field.checked) {
-        serialized.push({
-          name: field.name,
-          value: field.value
-        });
-      }
+    // end trial if trial_duration is set
+    if (trial.trial_duration !== null) {
+      jsPsych.pluginAPI.setTimeout(function() {
+        end_trial();
+      }, trial.trial_duration);
     }
-
-    return serialized;
   };
-
-  // from https://stackoverflow.com/questions/1184624/convert-form-data-to-javascript-object-with-jquery
-  function objectifyForm(formArray) {//serialize data function
-    var returnArray = {};
-    for (var i = 0; i < formArray.length; i++){
-      returnArray[formArray[i]['name']] = formArray[i]['value'];
-    }
-    return returnArray;
-  }
 
   return plugin;
+
 })();
