@@ -9,12 +9,12 @@
  **/
 
 
-jsPsych.plugins["html-keyboard-response"] = (function() {
+jsPsych.plugins["html-keyboard-response-persist"] = (function() {
 
   var plugin = {};
 
   plugin.info = {
-    name: 'html-keyboard-response',
+    name: 'html-keyboard-response-persist',
     description: '',
     parameters: {
       stimulus: {
@@ -60,7 +60,7 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    var new_html = '<div id="jspsych-html-keyboard-response-stimulus">'+trial.stimulus+'</div>';
+    var new_html = '<div id="jspsych-html-keyboard-response-persist-stimulus">'+trial.stimulus+'</div>';
 
     // add prompt
     if(trial.prompt !== null){
@@ -89,9 +89,9 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
 
       // gather the data to store for the trial
       var trial_data = {
-        "rt": response.rt,
+        "rt": JSON.stringify(response.rt),
         "stimulus": trial.stimulus,
-        "key_press": response.key
+        "key_press": JSON.stringify(response.key)
       };
 
       // clear the display
@@ -106,12 +106,11 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector('#jspsych-html-keyboard-response-stimulus').className += ' responded';
+      display_element.querySelector('#jspsych-html-keyboard-response-persist-stimulus').className += ' responded';
 
-      // only record the first response
-      if (response.key == null) {
-        response = info;
-      }
+      
+      response.rt.push(info.rt);   // <- these two lines instead of "if (response.key == null) {response = info;}"
+      response.key.push(info.key);
 
       if (trial.response_ends_trial) {
         end_trial();
@@ -124,7 +123,7 @@ jsPsych.plugins["html-keyboard-response"] = (function() {
         callback_function: after_response,
         valid_responses: trial.choices,
         rt_method: 'performance',
-        persist: false,
+        persist: true,
         allow_held_key: false
       });
     }
