@@ -8,12 +8,12 @@
  *
  */
 
-jsPsych.plugins['survey-html-form-timed-NEW'] = (function() {
+jsPsych.plugins['survey-html-response-timed'] = (function() {
 
     var plugin = {};
   
     plugin.info = {
-      name: 'survey-html-form-timed-NEW',
+      name: 'survey-html-response-timed',
       description: '',
       parameters: {
         html: {
@@ -51,14 +51,14 @@ jsPsych.plugins['survey-html-form-timed-NEW'] = (function() {
           pretty_name: 'Allow autocomplete',
           default: false,
           description: "Setting this to true will enable browser auto-complete or auto-fill for the form."
-        },
+        }//,
         // added by Garrett - need no button/auto-advance functionality
-        trial_duration: {
-            type: jsPsych.plugins.parameterType.INT,
-            pretty_name: 'Trial duration',
-            default: 5000,
-            description:'Ends trial after a set amount of time, rather than on button event. Default 5 sec for testing.'
-        }
+        //trial_duration: {
+            //type: jsPsych.plugins.parameterType.INT,
+            //pretty_name: 'Button activation delay',
+            //default: 5000,
+            //description:'Delays button activation ensure trial length. Default 10 sec for testing.'
+        //}
       }
     }
   
@@ -67,20 +67,22 @@ jsPsych.plugins['survey-html-form-timed-NEW'] = (function() {
       var html = '';
       // show preamble text
       if(trial.preamble !== null){
-        html += '<div id="jspsych-survey-html-form-preamble" class="jspsych-survey-html-form-preamble">'+trial.preamble+'</div>';
+        html += '<div id="jspsych-survey-html-response-timed-preamble" class="jspsych-survey-html-delay-button-preamble">'+trial.preamble+'</div>';
       }
       // start form
       if ( trial.autocomplete ) {
-        html += '<form id="jspsych-survey-html-form">'
+        html += '<form id="jspsych-survey-html-response-timed">'
       } else {
-        html += '<form id="jspsych-survey-html-form" autocomplete="off">'
+        html += '<form id="jspsych-survey-html-response-timed" autocomplete="off">'
       }
   
       // add form HTML / input elements
       html += trial.html;
   
-      // add submit button
-      html += '<input type="submit" id="jspsych-survey-html-form-timed-NEW-next" class="jspsych-btn jspsych-survey-html-form" value="'+trial.button_label+'" deactive></input>';
+      // no submit button
+      html += '<input type="submit" id="jspsych-survey-html-response-timed-button" class="jspsych-btn jspsych-survey-html-delay-button" name="submit" value="'+trial.button_label+'" disabled></input>';
+      //html += '<input type="submit" id="jspsych-survey-html-form-next" class="jspsych-btn jspsych-survey-html-form" value="'+trial.button_label+'"></input>';f
+    
   
       html += '</form>';
       display_element.innerHTML = html;
@@ -95,8 +97,19 @@ jsPsych.plugins['survey-html-form-timed-NEW'] = (function() {
             focus_elements[0].focus();
         }
       }
-  
-      display_element.querySelector('#jspsych-survey-html-form-timed-NEW-next').addEventListener('submit', function(event) {
+
+      // activate button just before requested submit
+      jsPsych.pluginAPI.setTimeout(function(){
+        display_element.querySelector('#jspsych-survey-html-response-timed-button').disabled = null;
+      }, 10000);
+
+      // request submit for auto advance if subject doesn't press
+      jsPsych.pluginAPI.setTimeout(function(){
+        display_element.querySelector('#jspsych-survey-html-response-timed-button').requestSubmit();
+    }, 10000);
+    
+    // on press or after submit request, finish trial
+    display_element.querySelector('#jspsych-survey-html-response-timed-button').addEventListener('submit', function(event) {
         // don't submit form
         event.preventDefault();
   
@@ -124,12 +137,6 @@ jsPsych.plugins['survey-html-form-timed-NEW'] = (function() {
   
       var startTime = performance.now();
       
-      // added by Garrett - this *should* simulate button event
-      if (trial.trial_duration !== null) {
-        jsPsych.pluginAPI.setTimeout(function() {
-          display_element.querySelector('#jspsych-survey-text-form-timed-NEW-next').requestSubmit();
-        }, trial.trial_duration);
-      }
     };
   
     /*!
