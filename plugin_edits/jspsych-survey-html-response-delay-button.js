@@ -85,7 +85,7 @@ jsPsych.plugins['survey-html-delay-button'] = (function() {
       if (trial.button_duration !== null) {
         html += '<input type="submit" id="jspsych-survey-html-delay-button-next" class="jspsych-btn jspsych-survey-html-delay-button" name="submit" value="'+trial.button_label+'" disabled></input>'
       } else {
-        html += '<input type="submit" id="jspsych-survey-html-form-next" class="jspsych-btn jspsych-survey-html-form" value="'+trial.button_label+'"></input>';
+        html += '<input type="submit" id="jspsych-survey-html-delay-button-next" class="jspsych-btn jspsych-survey-html-delay-button" value="'+trial.button_label+'"></input>';
       }
       
       // function to activate button after 30 sec or set time

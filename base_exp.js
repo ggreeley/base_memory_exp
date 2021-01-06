@@ -158,16 +158,16 @@ var recall_4 = {
     autofocus: 'test-resp-box1',
     button_label: 'Continue onto debrief',
     button_duration: 10000 // time to keep button disabled (ensuring subject stays on page.
-    // if excluded, button auto-active, identical to survey-html-form plugin.
+    // if excluded, button is auto-active, identical to survey-html-form plugin.
 }
 
 timeline.push(recall_4);
 
 var closeInstr1 = {
     type: 'survey-html-form',
-    preamble: 'That concludes this example experiment' +
-    'This example only scratches the surface - there is a lot of flexibility. I have embedded the jsPsych site in case you are interested.' +
-    'When ready, click "Finish" and then close the tab.',
+    preamble: '<p>That concludes this example experiment.</p>' +
+    '<p>This example only scratches the surface - there is a lot of flexibility. I have embedded the jsPsych site in case you are interested.</p>' +
+    '<p>When ready, click "Finish" and then close the tab.</p>',
     html: `<iframe height=500 width=700 frameborder="no" src="https://www.jspsych.org/"></iframe><br>&nbsp;`,
     button_label: 'Finish'
 };
