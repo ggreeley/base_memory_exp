@@ -80,7 +80,7 @@ jsPsych.plugins['survey-html-response-timed'] = (function() {
       html += trial.html;
   
       // no submit button
-      html += '<input type="submit" id="jspsych-survey-html-response-timed-button" class="jspsych-btn jspsych-survey-html-delay-button" name="submit" value="'+trial.button_label+'" disabled></input>';
+      html += '<input type="submit" id="jspsych-survey-html-response-timed-button" class="jspsych-btn jspsych-survey-html-response-timed-button" name="submit" value="'+trial.button_label+'" disabled></input>';
       //html += '<input type="submit" id="jspsych-survey-html-form-next" class="jspsych-btn jspsych-survey-html-form" value="'+trial.button_label+'"></input>';f
     
   
@@ -99,17 +99,17 @@ jsPsych.plugins['survey-html-response-timed'] = (function() {
       }
 
       // activate button just before requested submit
-      jsPsych.pluginAPI.setTimeout(function(){
-        display_element.querySelector('#jspsych-survey-html-response-timed-button').disabled = null;
-      }, 10000);
+      ///jsPsych.pluginAPI.setTimeout(function(){
+        ///display_element.querySelector('#jspsych-survey-html-response-timed-button').disabled = null;
+      ///}, 10000);
 
       // request submit for auto advance if subject doesn't press
       jsPsych.pluginAPI.setTimeout(function(){
-        display_element.querySelector('#jspsych-survey-html-response-timed-button').requestSubmit();
-    }, 10000);
+        display_element.querySelector('#jspsych-survey-html-response-timed-form').requestSubmit();
+    }, 15000);
     
     // on press or after submit request, finish trial
-    display_element.querySelector('#jspsych-survey-html-response-timed-button').addEventListener('submit', function(event) {
+    display_element.querySelector('#jspsych-survey-html-response-timed-form').addEventListener('submit', function(event) {
         // don't submit form
         event.preventDefault();
   

@@ -6,6 +6,8 @@
  *
  * documentation: docs.jspsych.org
  *
+ * *** edited by Garrett Greeley,  week of 1/1/2020 - 1/7/2020
+ * *** added parameter to customize 
  */
 
 jsPsych.plugins['survey-html-delay-button'] = (function() {
@@ -51,14 +53,14 @@ jsPsych.plugins['survey-html-delay-button'] = (function() {
           pretty_name: 'Allow autocomplete',
           default: false,
           description: "Setting this to true will enable browser auto-complete or auto-fill for the form."
-        }//,
-        // added by Garrett - need no button/auto-advance functionality
-        //trial_duration: {
-            //type: jsPsych.plugins.parameterType.INT,
-            //pretty_name: 'Button activation delay',
-            //default: 5000,
-            //description:'Delays button activation ensure trial length. Default 10 sec for testing.'
-        //}
+        },
+        // added by Garrett - when button activates
+        button_duration: {
+            type: jsPsych.plugins.parameterType.INT,
+            pretty_name: 'Button activation delay',
+            default: null,
+            description:'Delays button activation ensure trial length. Default 30 sec. Subject still needs to press button.'
+        }
       }
     }
   
@@ -79,14 +81,19 @@ jsPsych.plugins['survey-html-delay-button'] = (function() {
       // add form HTML / input elements
       html += trial.html;
   
-      // add submit button
-      html += '<input type="submit" id="jspsych-survey-html-delay-button-next" class="jspsych-btn jspsych-survey-html-delay-button" name="submit" value="'+trial.button_label+'" disabled></input>';
-      //html += '<input type="submit" id="jspsych-survey-html-form-next" class="jspsych-btn jspsych-survey-html-form" value="'+trial.button_label+'"></input>';
+      // add submit button - if duration set: default = disabled, else: button active immediately as usual
+      if (trial.button_duration !== null) {
+        html += '<input type="submit" id="jspsych-survey-html-delay-button-next" class="jspsych-btn jspsych-survey-html-delay-button" name="submit" value="'+trial.button_label+'" disabled></input>'
+      } else {
+        html += '<input type="submit" id="jspsych-survey-html-form-next" class="jspsych-btn jspsych-survey-html-form" value="'+trial.button_label+'"></input>';
+      }
       
-      // function to activate button after 10 sec
+      // function to activate button after 30 sec or set time
+      if (trial.button_duration !== null){
       jsPsych.pluginAPI.setTimeout(function(){
           display_element.querySelector('#jspsych-survey-html-delay-button-next').disabled = null;
-        }, 30000);
+        }, trial.button_duration);
+      }
     
   
       html += '</form>';
