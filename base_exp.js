@@ -147,7 +147,7 @@ var recall_3 = {
 
 timeline.push(recall_3);
 
-// relies on custom plugin that delays button activation (default 30 sec for testing)
+// relies on custom plugin that delays button activation for advancing (survey-html-delay-button)
 var recall_4 = {
     type: 'survey-html-delay-button',
     preamble: '<p> Please type all the words you can remember, in any order that you prefer. </p>' +
@@ -163,6 +163,7 @@ var recall_4 = {
 
 timeline.push(recall_4);
 
+// relies on custom plugin that hides button and auto-advances after given duration (survey-html-response-timed)
 var recall_5 = {
     type: 'survey-html-response-timed',
     preamble: '<p> Please type all the words you can remember, in any order that you prefer. </p>' +
