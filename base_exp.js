@@ -163,6 +163,19 @@ var recall_4 = {
 
 timeline.push(recall_4);
 
+var recall_5 = {
+    type: 'survey-html-response-timed',
+    preamble: '<p> Please type all the words you can remember, in any order that you prefer. </p>' +
+    '<p> You can use the box, entering one word at a time. You will auto-advance after 10 seconds. </p>',
+    // relies on custom css / textarea html - very handy for recall 
+    html: 
+    '<div class="inline-div"><textarea name="recall5box1" type="text" id="test-resp-box1"></textarea></div>',
+    autofocus: 'test-resp-box1',
+    trial_duration: 10000
+}
+
+timeline.push(recall_5);
+
 var closeInstr1 = {
     type: 'survey-html-form',
     preamble: '<p>That concludes this example experiment.</p>' +
